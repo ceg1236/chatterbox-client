@@ -40,7 +40,6 @@ $(document).ready(function() {
 
           $('#chats li').remove();
 
-          // var dataArray = data.results.slice(data.results.length - 10, data.results.length);
           console.log(data.results);
           $.each(data.results, function(index, msgObj){
             // debugger;
@@ -91,19 +90,9 @@ $(document).ready(function() {
 
 });
 
-// HTML will include a display elmt, an input box,
-//  and submit button.
-//  Display elmt - ul populated w li where each msg
-//                is li
-// Input box - input tag
-// Submit button - when clicked, call
-//                  send function with msg
-//
-// Every so often aka setTimeout...
-  // call clear, fetch, and display to our DOM-display
-  //
-// Event handler - click submit take any input text,
-    //save to var, stringify, put in msg.text prop
-    // pass in var to .send
-    //
-    //
+// Rooms:
+// Make the room clickable in chat
+// On click, display only the messages in that room
+// -- To do this, do some sort of fetch, but only display those msgs
+//     from that room (via for-loop / each search??)
+// Add another input and button to create rooms
