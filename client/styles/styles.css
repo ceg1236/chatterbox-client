@@ -82,3 +82,17 @@ form input[type=text] {
 .spinner img {
     padding: 10px;
 }
+.container {
+  border: 2px;
+  height: 500px;
+  position:relative;
+  padding:0 0 0 55px;
+  overflow:scroll;
+}
+#sidebar {
+    position:fixed;
+    top:0; bottom:0; left:0;
+    border: black 20px solid;
+    width:300px;
+    background:white;
+}
