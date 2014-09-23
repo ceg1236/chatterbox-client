@@ -5,25 +5,28 @@ $(document).ready(function() {
   var app = {
     server: "https://api.parse.com/1/classes/chatterbox",
     room: 'lobby',
+    name: prompt("What's your name?"),
+
     init: function() {
-      var name = prompt("What's your name?");
       this.fetch();
     },
+
     send: function(message) {
       // debugger;
       $.ajax({
         url: this.server,
         type: 'POST',
-        data: JSON.stringify(message),
+        data: message,
         contentType: 'application/json',
         success: function(data) {
           console.log('Message sent');
         },
         error: function(data) {
-          console.log('Failed to send');
+          console.log('Failed to send!!!');
         }
       });
     },
+
     fetch: function() {
       $.ajax({
         url: this.server,
@@ -47,16 +50,21 @@ $(document).ready(function() {
         },
       });
     },
-    clearMessages: function() {
-      $('#chats').empty();
-    },
-    addMessage: function(msg) {
-      $('#chats').append('<li>'+msg.username+' '+msg.text+
-        ' '+msg.roomname+'</li>');
-    },
+
+    // Probably dont need:...
+    // clearMessages: function() {
+    //   $('#chats').empty();
+    // },
+
+    // addMessage: function(msg) {
+    //   $('#chats').append('<li>'+msg.username+' '+msg.text+
+    //     ' '+msg.roomname+'</li>');
+    // },
+
     addRoom: function(rmname) {
       $('#roomSelect').append("<div class='room'></div>");
     },
+
     display: function(){
       // After init, after fetching messages, this will take the fetched data and return MOST RECENT messages
       this.fetch();
@@ -81,12 +89,6 @@ $(document).ready(function() {
     $('.MessageInput').val('');
   });
 
-
-  // var message = {
-  //   username: 'Mel Brooks',
-  //   text: 'It\'s good to be the king!!!!!',
-  //   roomname: 'lobby'
-  // };
 });
 
 // HTML will include a display elmt, an input box,
