@@ -8,13 +8,25 @@ $(document).ready(function() {
     name: prompt("What's your name?"),
 
     init: function() {
-      this.fetch();
+      app.fetch();
+      $('.SubmitButton').on('click', function(){
+        var msgToSend =  $('#MessageInput').val();
+
+        var msgToServer = JSON.stringify({
+          username: app.name,     // fix this
+          text: msgToSend,
+          roomname: app.room
+        });
+        console.log(msgToServer);
+        app.send(msgToServer);
+        $('#MessageInput').val('');
+      });
     },
 
     send: function(message) {
       // debugger;
       $.ajax({
-        url: this.server,
+        url: app.server,
         type: 'POST',
         data: message,
         contentType: 'application/json',
@@ -27,9 +39,9 @@ $(document).ready(function() {
       });
     },
 
-    fetch: function(roomname) {
+    fetch: function(callback) {
       $.ajax({
-        url: this.server,
+        url: app.server,
         type: 'GET',
         data: {
           order: '-createdAt',
@@ -87,26 +99,15 @@ $(document).ready(function() {
 
   app.init();
   setInterval(function(){
-    app.fetch();
+    app.fetch(display);
   }, 5000);
 
-  $('.SubmitButton').on('click', function(){
-    var msgToSend =  $('#MessageInput').val();
 
-    var msgToServer = JSON.stringify({
-      username: app.name,     // fix this
-      text: msgToSend,
-      roomname: app.room
-    });
-    console.log(msgToServer);
-    app.send(msgToServer);
-    $('#MessageInput').val('');
-  });
 
   $('#chats').on('click', 'a', function() {
     var rm = $(this).text();
     console.log(rm);
-    app.fetch(rm); // when we click here, the page refreshes our msgs
+    app.fetch(roomDisplay); // when we click here, the page refreshes our msgs
     // we don't want that??
   });
 
