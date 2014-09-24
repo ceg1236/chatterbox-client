@@ -52,24 +52,8 @@ $(document).ready(function() {
           // if we have a roomname
           // fetch and display only msgs with that rm prop
           // else display all msgs
-          console.log('fetchin');
-          if(roomname) {
-            // filter for correct messages and then run
-            var roomData = {
-              results: []
-            };
-            $.each(data.results, function(index, msgObj){
-              if (msgObj.roomname === roomname){
-                roomData.results.push(msgObj);
-              }
-            });
-            console.log('if', roomData);
-            app.addRoom(roomData.results);
-          } else {
-            console.log('eslein', data);
 
-            app.display(data);
-          }
+          callback(data);
 
         },
       });
@@ -84,7 +68,28 @@ $(document).ready(function() {
 
     },
 
-    display: function(data){
+    // pass the data into roomDisplay, have the room already chosen so already passing in the appropriate data
+    roomDisplay: function(roomname, data){
+      $('#sidebar li').remove();
+      var roomData = {
+        results: []
+      };
+      // ISSUE: need the object passed into each to contain that particular room's messages
+      $.each(data.results, function(index, msgObj){
+        console.log('roomData.results in roomDisplay is ', roomData.results);
+        if (msgObj.roomname === roomname){
+          roomData.results.push(msgObj);
+        }
+      });
+      $.each(roomData.results, function(index, msgObj){
+        $('#sidebar').append('<li>'+ _.escape(msgObj.username) +': ' + _.escape(msgObj.text) + ' |from: '+
+          '<a class="room" href="#MessageInput">' + _.escape(msgObj.roomname) + '</a>'+'</li>');
+      });
+      $container = $('.container');
+      $('.container').animate({ scrollTop: $container[$container.length-1].scrollHeight }, "slow");
+    },
+
+     display: function(data){
       // After init, after fetching messages, this will take the fetched data and return MOST RECENT messages
       // $('#chats li').remove();
 
@@ -99,15 +104,19 @@ $(document).ready(function() {
 
   app.init();
   setInterval(function(){
-    app.fetch(display);
+    app.fetch(app.display);
   }, 5000);
 
 
 
   $('#chats').on('click', 'a', function() {
     var rm = $(this).text();
-    console.log(rm);
-    app.fetch(roomDisplay); // when we click here, the page refreshes our msgs
+
+    app.fetch(function(data){
+      test = data;
+      console.log('data issss ', data);
+      app.roomDisplay(rm, data);
+    }); // when we click here, the page refreshes our msgs
     // we don't want that??
   });
 
